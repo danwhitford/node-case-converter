@@ -1,13 +1,12 @@
 {
-  "name": "ll",
+  "name": "node-case-converter",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "jest test/converter.test.ts",
     "start": "ts-node src/converter.ts"
   },
-  "author": "",
+  "author": "Daniel Whitford",
   "license": "ISC",
   "dependencies": {
     "@types/jest": "^26.0.4",
