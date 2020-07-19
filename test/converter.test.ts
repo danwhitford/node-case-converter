@@ -27,7 +27,7 @@ test('Converts both ways', () => {
 
 test('Property testing for strings', () => {
     const camelPattern = /^[a-z]+[a-zA-Z]*$/
-    const snakePattern = /^[a-z]+[a-z_]*$/
+    const snakePattern = /^[a-z]+([a-z_]*[a-z]{1}|[a-z]*)$/
     const snakeGen = fc.string().filter(s => s.match(snakePattern) !== null)
     const camelGen = fc.string().filter(s => s.match(camelPattern) !== null)
 
