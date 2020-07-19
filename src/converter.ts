@@ -16,13 +16,15 @@ const objectKeysConverter = (o: object, conversionFn: ((ss: string) => string)) 
     return newObject
 }
 
-const snakePattern = /[a-z]+_(?<capt>[a-z])[a-z_]+/
-export const snakeToCamel = (s: string): string =>
-    converter(s, snakePattern, (ss, capt) => ss.replace('_' + capt, capt.toLocaleUpperCase()))
+const snakePattern = /_(?<capt>[a-z])/
+export const snakeToCamel = (s: string): string => {
+    return converter(s, snakePattern, (ss, capt) => ss.replace('_' + capt, capt.toLocaleUpperCase()))
+}
 
-const camelPattern = /[a-z]+(?<capt>[A-Z])[a-zA-Z]+/
-export const camelToSnake = (s: string): string =>
-    converter(s, camelPattern, (ss, capt) => ss.replace(capt, "_" + capt.toLocaleLowerCase()))
+const camelPattern = /(?<capt>[A-Z])/
+export const camelToSnake = (s: string): string => {
+    return converter(s, camelPattern, (ss, capt) => ss.replace(capt, "_" + capt.toLocaleLowerCase()))
+}
 
 export const objectSnakeToCamel = (o: object) =>
     objectKeysConverter(o, snakeToCamel)

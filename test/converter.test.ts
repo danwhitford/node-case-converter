@@ -1,15 +1,18 @@
 import { snakeToCamel, camelToSnake, objectCamelToSnake, objectSnakeToCamel } from '../src/converter'
+import * as fc from 'fast-check';
 
 test('Converts to camel case', () => {
     expect(snakeToCamel("something")).toBe("something");
     expect(snakeToCamel("some_thing")).toBe("someThing");
     expect(snakeToCamel("some_thing_else")).toBe("someThingElse");
+    expect(snakeToCamel("a")).toBe("a");
 })
 
 test('Converts to snake case', () => {
     expect(camelToSnake("something")).toBe("something");
     expect(camelToSnake("someThing")).toBe("some_thing");
     expect(camelToSnake("someThingElse")).toBe("some_thing_else");
+    expect(camelToSnake("a")).toBe("a");
 })
 
 test('Converts both ways', () => {
@@ -20,6 +23,29 @@ test('Converts both ways', () => {
     expect(camelToSnake(snakeToCamel("something"))).toBe("something");
     expect(camelToSnake(snakeToCamel("some_thing"))).toBe("some_thing");
     expect(camelToSnake(snakeToCamel("some_thing_else"))).toBe("some_thing_else");
+})
+
+test('Property testing for strings', () => {
+    const camelPattern = /^[a-z]+[a-zA-Z_]*$/
+    const snakePattern = /^[a-z]+[a-z_]*$/
+    const snakeGen = fc.string().filter(s => s.match(snakePattern) !== null)
+    const camelGen = fc.string().filter(s => s.match(camelPattern) !== null)
+
+    fc.assert(
+        fc.property(camelGen, data => {
+            const converted = camelToSnake(data)
+            expect(converted).toMatch(snakePattern)
+            expect(snakeToCamel(converted)).toEqual(data)
+        })
+    )
+
+    fc.assert(
+        fc.property(snakeGen, data => {
+            const converted = snakeToCamel(data)
+            expect(converted).toMatch(camelPattern)
+            expect(camelToSnake(converted)).toEqual(data)
+        })
+    )
 })
 
 const snakeObj = {
